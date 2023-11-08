@@ -1,4 +1,5 @@
-﻿@model ListViewModel
+﻿@using NumberSortingWebApp.Library.Algorithm.Sorting;
+@model ListViewModel
 @{
     ViewData["Title"] = "Number Sorting Job List";
 }
@@ -18,10 +19,10 @@
             @foreach (var sortedNumberRow in Model.sortedNumberRowList)
             {
                 <tr>
-                    <td>@sortedNumberRow.sorted_array</td>
-                    <td>@(sortedNumberRow.sort_direction == true ? "Ascending" : "Descending")</td>
-                    <td>@sortedNumberRow.time_taken</td>
-                    <td>@(sortedNumberRow.is_sorted == true ? "Completed" : "In Progress")</td>
+                    <td>@sortedNumberRow.SortedArray</td>
+                    <td>@(sortedNumberRow.SortDirection.ToString())</td>
+                    <td>@sortedNumberRow.TimeTaken</td>
+                    <td>@(sortedNumberRow.IsSorted == true ? "Completed" : "In Progress")</td>
                     <td><button value="Export">Export</button></td>
                 </tr>
             }

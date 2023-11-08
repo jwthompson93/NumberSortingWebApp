@@ -6,11 +6,13 @@ namespace NumberSortingWebApp.Library.Database.Sql
 {
     public class SortedNumberConnection : DatabaseConnection
     {
+        private readonly string tableName = "SortedNumbers";
+
         public List<SortedNumbersRow> GetAll()
         {
             var list = new List<SortedNumbersRow>();
 
-            SqlCommand sqlCommand = new SqlCommand(String.Format(GET, "sorted_numbers"));
+            SqlCommand sqlCommand = new SqlCommand(String.Format(GET, tableName));
             list = QueryList(sqlCommand);
 
             list.ForEach(row => Console.WriteLine(row.ToString()));
@@ -22,7 +24,7 @@ namespace NumberSortingWebApp.Library.Database.Sql
         {
             var sortedNumbersRow = new SortedNumbersRow();
 
-            SqlCommand sqlCommand = new SqlCommand(String.Format(GET_BY_ID, "sorted_numbers", id));
+            SqlCommand sqlCommand = new SqlCommand(String.Format(GET_BY_ID, tableName, id));
             sortedNumbersRow = QuerySingle(sqlCommand);
 
             Console.WriteLine(sortedNumbersRow.ToString());
@@ -30,33 +32,32 @@ namespace NumberSortingWebApp.Library.Database.Sql
             return sortedNumbersRow;
         }
 
-        public Boolean Insert(SortedNumbersRow sortedNumbersRow)
+        public long Insert(SortedNumbersRow sortedNumbersRow)
         {
-            SqlCommand sqlCommand = new SqlCommand(String.Format(INSERT, "sorted_numbers"));
+            SqlCommand sqlCommand = new SqlCommand(String.Format(INSERT, tableName));
 
-            sqlCommand.Parameters.AddWithValue("@sorted_array", sortedNumbersRow.sorted_array);
-            sqlCommand.Parameters.AddWithValue("@sort_direction", sortedNumbersRow.sort_direction);
-            sqlCommand.Parameters.AddWithValue("@time_taken", sortedNumbersRow.time_taken);
-            sqlCommand.Parameters.AddWithValue("@is_sorted", sortedNumbersRow.is_sorted);
+            sqlCommand.Parameters.AddWithValue("@sorted_array", sortedNumbersRow.SortedArray);
+            sqlCommand.Parameters.AddWithValue("@sort_direction", sortedNumbersRow.SortDirection);
+            sqlCommand.Parameters.AddWithValue("@is_sorted", sortedNumbersRow.IsSorted);
 
-            var rowsAffected = NonQuery(sqlCommand);
+            var id = NonQuery(sqlCommand);
 
-            return rowsAffected;
+            return id;
         }
 
-        public Boolean Update(SortedNumbersRow sortedNumbersRow)
+        public long Update(SortedNumbersRow sortedNumbersRow)
         {
-            SqlCommand sqlCommand = new SqlCommand(String.Format(UPDATE, "sorted_numbers"));
+            SqlCommand sqlCommand = new SqlCommand(String.Format(UPDATE, tableName));
 
-            sqlCommand.Parameters.AddWithValue("@sorted_array", sortedNumbersRow.sorted_array);
-            sqlCommand.Parameters.AddWithValue("@sort_direction", sortedNumbersRow.sort_direction);
-            sqlCommand.Parameters.AddWithValue("@time_taken", sortedNumbersRow.time_taken);
-            sqlCommand.Parameters.AddWithValue("@is_sorted", sortedNumbersRow.is_sorted);
-            sqlCommand.Parameters.AddWithValue("@id", sortedNumbersRow.id);
+            sqlCommand.Parameters.AddWithValue("@sorted_array", sortedNumbersRow.SortedArray);
+            sqlCommand.Parameters.AddWithValue("@sort_direction", sortedNumbersRow.SortDirection);
+            sqlCommand.Parameters.AddWithValue("@time_taken", sortedNumbersRow.TimeTaken);
+            sqlCommand.Parameters.AddWithValue("@is_sorted", sortedNumbersRow.IsSorted);
+            sqlCommand.Parameters.AddWithValue("@id", sortedNumbersRow.Id);
 
-            var rowsAffected = NonQuery(sqlCommand);
+            var id = NonQuery(sqlCommand);
 
-            return rowsAffected;
+            return id;
         }
     }
 }

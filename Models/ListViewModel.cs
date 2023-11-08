@@ -8,8 +8,8 @@ namespace NumberSortingWebApp.Models
         private SortedNumberConnection _connection;
         public List<SortedNumbersRow> sortedNumberRowList { get; set; }
 
-        public ListViewModel() { 
-            _connection = new SortedNumberConnection();
+        public ListViewModel(SortedNumberConnection connection) { 
+            _connection = connection;
 
             sortedNumberRowList = _connection.GetAll();
         }
