@@ -1,0 +1,28 @@
+﻿@model CreateViewModel
+@{
+    ViewData["Title"] = "Create New Sort Job";
+}
+
+<div class="text-left">
+    <form asp-action="Create">
+        <table class="table">
+            <tr>
+                <td>Numbers</td>
+                <td><input type="text" asp-for="SortedNumbersRow.sorted_array" /></td>
+            </tr>
+            <tr>
+                <td>Sort Order</td>
+                <td>
+                    <select asp-for="SortedNumbersRow.sort_direction">
+                        <option value="0">Descending</option>
+                        <option value="1">Ascending</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <div style="text-align:left">
+            <!--<a asp-area="" asp-controller="NumberSorting" asp-action="Create" class="btn btn-primary btn-sm">Create</a>-->
+            <input type="submit" />
+        </div>
+    </form>
+</div>

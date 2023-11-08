@@ -1,0 +1,33 @@
+﻿@model ListViewModel
+@{
+    ViewData["Title"] = "Number Sorting Job List";
+}
+
+<div class="text-center">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Numbers</th>
+                <th scope="col">Sort Direction</th>
+                <th scope="col">Time Taken (ms)</th>
+                <th scope="col">Progress</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sortedNumberRow in Model.sortedNumberRowList)
+            {
+                <tr>
+                    <td>@sortedNumberRow.sorted_array</td>
+                    <td>@(sortedNumberRow.sort_direction == true ? "Ascending" : "Descending")</td>
+                    <td>@sortedNumberRow.time_taken</td>
+                    <td>@(sortedNumberRow.is_sorted == true ? "Completed" : "In Progress")</td>
+                    <td><button value="Export">Export</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="text-left">
+    <a asp-area="" asp-controller="NumberSorting" asp-action="New" class="btn btn-primary btn-sm">New Sort</a>
+</div>

@@ -1,0 +1,18 @@
+﻿using NumberSortingWebApp.Library.Database.Object;
+using NumberSortingWebApp.Library.Database.Sql;
+
+namespace NumberSortingWebApp.Models
+{
+    public class ListViewModel
+    {
+        private SortedNumberConnection _connection;
+        public List<SortedNumbersRow> sortedNumberRowList { get; set; }
+
+        public ListViewModel() { 
+            _connection = new SortedNumberConnection();
+
+            sortedNumberRowList = _connection.GetAll();
+        }
+
+    }
+}
