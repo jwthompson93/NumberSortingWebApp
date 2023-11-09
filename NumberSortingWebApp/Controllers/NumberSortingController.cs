@@ -1,21 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NumberSortingWebApp.Library.Alert;
 using NumberSortingWebApp.Library.Algorithm.Sorting;
 using NumberSortingWebApp.Library.Database.Object;
 using NumberSortingWebApp.Library.Database.Sql;
+using NumberSortingWebApp.Library.TempData;
 using NumberSortingWebApp.Models;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text.Json;
 
 namespace NumberSortingWebApp.Controllers
 {
     public class NumberSortingController : Controller
     {
-        private SortedNumberConnection connection = new SortedNumberConnection();
-        private ISort<int> sortingAlgorithmn = new Quicksort();
+        private SortedNumberConnection connection;
+        private ISort<int> sortingAlgorithmn;
+
+        public NumberSortingController()
+        {
+            connection = new SortedNumberConnection();
+            sortingAlgorithmn = new Quicksort();
+        }
 
         public IActionResult List()
         {
-            var model = new ListViewModel(connection);
+            var model = new ListViewModel(connection, TempData.Get<Alert>("alert"));
+
             return View(model);
         }
 
@@ -47,8 +57,12 @@ namespace NumberSortingWebApp.Controllers
                 sw.Stop();
 
                 sortedNumbersRow.TimeTaken = sw.ElapsedMilliseconds;
+                sortedNumbersRow.IsSorted = true;
+
                 id = connection.Update(sortedNumbersRow);
             }
+
+            TempData.Put<Alert>("alert", new Alert(AlertType.success, "Job has been successfully submitted!"));
 
             // Take user back to List page
             return RedirectToAction("List");

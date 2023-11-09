@@ -1,9 +1,16 @@
-﻿@using NumberSortingWebApp.Library.Algorithm.Sorting;
+﻿@using NumberSortingWebApp.Library.Alert;
+@using NumberSortingWebApp.Library.Algorithm.Sorting;
 @model ListViewModel
 @{
     ViewData["Title"] = "Number Sorting Job List";
 }
 
+@if (Model.Alert != null)
+{
+    <div class="alert alert-@Model.Alert.Type" role="alert">
+        @Model.Alert.Message
+    </div>
+}
 <div class="text-center">
     <table class="table">
         <thead>
