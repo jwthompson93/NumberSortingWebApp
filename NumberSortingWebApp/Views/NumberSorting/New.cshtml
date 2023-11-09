@@ -15,10 +15,8 @@
             <tr>
                 <td>Numbers</td>
                 <td>
-                    <input 
-                        type="text"
-                        asp-for="SortedNumbersRow.SortedArray" />
-                    <span asp-validation-for="SortedNumbersRow.SortedArray"></span>
+                    <input type="text" class="form-control" asp-for="SortedNumbersRow.SortedArray" required/>
+                    <div class="valid-feedback"></div>
                 </td>
             </tr>
             <tr>

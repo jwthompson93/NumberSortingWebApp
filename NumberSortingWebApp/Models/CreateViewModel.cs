@@ -14,7 +14,6 @@ namespace NumberSortingWebApp.Models
 
         public Alert Alert { get; set; }
 
-
         public CreateViewModel(Alert alert)
         {
             this.Alert = alert;
