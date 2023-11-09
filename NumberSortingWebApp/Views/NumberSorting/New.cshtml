@@ -3,12 +3,23 @@
     ViewData["Title"] = "Create New Sort Job";
 }
 
+@if (TempData.ContainsKey("alert"))
+{
+    <div class="alert alert-@Model.Alert.Type.ToString()" role="alert">
+        @Model.Alert.Message
+    </div>
+}
 <div class="text-left">
-    <form asp-action="Create">
+    <form method="post" asp-action="Create">
         <table class="table">
             <tr>
                 <td>Numbers</td>
-                <td><input type="text" asp-for="SortedNumbersRow.SortedArray" /></td>
+                <td>
+                    <input 
+                        type="text"
+                        asp-for="SortedNumbersRow.SortedArray" />
+                    <span asp-validation-for="SortedNumbersRow.SortedArray"></span>
+                </td>
             </tr>
             <tr>
                 <td>Sort Order</td>

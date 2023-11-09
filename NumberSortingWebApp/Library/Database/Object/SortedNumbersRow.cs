@@ -1,11 +1,14 @@
 using NumberSortingWebApp.Library.Algorithm.Sorting;
+using System.ComponentModel.DataAnnotations;
 
 namespace NumberSortingWebApp.Library.Database.Object
 {
-    public class SortedNumbersRow
+    public partial class SortedNumbersRow
     {
         public long Id { get; set; }
 
+        [Required]
+        //[RegularExpression("[^\\d+,\\d+$]", ErrorMessage = "Values must be numeric and comma-separated")]
         public string SortedArray { get; set; }
 
         public SortDirection SortDirection { get; set; }
