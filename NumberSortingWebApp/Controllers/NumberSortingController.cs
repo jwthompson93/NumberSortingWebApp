@@ -6,8 +6,6 @@ using NumberSortingWebApp.Library.Database.Sql;
 using NumberSortingWebApp.Library.TempData;
 using NumberSortingWebApp.Models;
 using System.Diagnostics;
-using System.Reflection;
-using System.Text.Json;
 
 namespace NumberSortingWebApp.Controllers
 {

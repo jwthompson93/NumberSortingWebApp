@@ -5,9 +5,9 @@
     ViewData["Title"] = "Number Sorting Job List";
 }
 
-@if (Model.Alert != null)
+@if (TempData.ContainsKey("alert"))
 {
-    <div class="alert alert-@Model.Alert.Type" role="alert">
+    <div class="alert alert-@Model.Alert.Type.ToString()" role="alert">
         @Model.Alert.Message
     </div>
 }

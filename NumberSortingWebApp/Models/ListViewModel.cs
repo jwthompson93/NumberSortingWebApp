@@ -1,4 +1,5 @@
-﻿using NumberSortingWebApp.Library.Alert;
+﻿using Microsoft.AspNetCore.Mvc;
+using NumberSortingWebApp.Library.Alert;
 using NumberSortingWebApp.Library.Database.Object;
 using NumberSortingWebApp.Library.Database.Sql;
 
@@ -9,13 +10,13 @@ namespace NumberSortingWebApp.Models
         private SortedNumberConnection _connection;
         public List<SortedNumbersRow> sortedNumberRowList { get; set; }
 
-        public Alert Alert { get; }
+        [TempData]
+        public Alert Alert { get; set; }
 
         public ListViewModel(SortedNumberConnection connection, Alert alert) { 
-            _connection = connection;
-
             this.Alert = alert;
 
+            _connection = connection;
             sortedNumberRowList = _connection.GetAll();
         }
 
