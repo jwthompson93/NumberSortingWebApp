@@ -1,4 +1,5 @@
-﻿using NumberSortingWebApp.Library.Database.Object;
+﻿using NumberSortingWebApp.Library.Algorithm.Sorting;
+using NumberSortingWebApp.Library.Database.Object;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -11,9 +12,13 @@ namespace NumberSortingWebApp.Library.Database.Sql
 
         protected readonly string GET = "select * from {0}";
         protected readonly string GET_BY_ID = "select * from {0} where id = {1}";
-        protected readonly string INSERT = "insert into {0} values (@sorted_array, @sort_direction, @time_taken, @is_sorted)";
-        protected readonly string UPDATE = "update {0}(sorted_array, sort_direction, time_taken, is_sorted) " +
-            "values (@sorted_array, @sort_direction, @time_taken, @is_sorted) where id = @id";
+        protected readonly string INSERT = "insert into {0} (sorted_array, sort_direction, is_sorted) " +
+                                            "output INSERTED.[id]" + 
+                                            "values (@sorted_array, @sort_direction, @is_sorted)";
+        protected readonly string UPDATE = "update {0} " +
+                                            "SET sorted_array = @sorted_array, time_taken = @time_taken, is_sorted = @is_sorted " + 
+                                            "output INSERTED.[id] " +
+                                            "where id = @id";
 
         protected List<SortedNumbersRow> QueryList(SqlCommand sqlCommand)
         {
@@ -29,11 +34,11 @@ namespace NumberSortingWebApp.Library.Database.Sql
                 {
                     SortedNumbersRow sortedNumbersRow = new SortedNumbersRow();
 
-                    sortedNumbersRow.id = dataReader.GetInt64(0);
-                    sortedNumbersRow.sorted_array = dataReader.GetString(1);
-                    sortedNumbersRow.sort_direction = dataReader.GetBoolean(2);
-                    sortedNumbersRow.time_taken = dataReader.GetInt64(3);
-                    sortedNumbersRow.is_sorted = dataReader.GetBoolean(4);
+                    sortedNumbersRow.Id = dataReader.GetInt64(0);
+                    sortedNumbersRow.SortedArray = dataReader.GetString(1);
+                    sortedNumbersRow.SortDirection = (SortDirection)dataReader.GetInt16(2);
+                    sortedNumbersRow.TimeTaken = dataReader.GetInt64(3);
+                    sortedNumbersRow.IsSorted = dataReader.GetBoolean(4);
 
                     list.Add(sortedNumbersRow);
                 }
@@ -55,34 +60,28 @@ namespace NumberSortingWebApp.Library.Database.Sql
 
                 if (dataReader.Read())
                 {
-                    sortedNumbersRow.id = dataReader.GetInt64(0);
-                    sortedNumbersRow.sorted_array = dataReader.GetString(1);
-                    sortedNumbersRow.sort_direction = dataReader.GetBoolean(2);
-                    sortedNumbersRow.time_taken = dataReader.GetInt64(3);
-                    sortedNumbersRow.is_sorted = dataReader.GetBoolean(4);
+                    sortedNumbersRow.Id = dataReader.GetInt64(0);
+                    sortedNumbersRow.SortedArray = dataReader.GetString(1);
+                    sortedNumbersRow.SortDirection = (SortDirection)dataReader.GetInt16(2);
+                    sortedNumbersRow.TimeTaken = dataReader.GetInt64(3);
+                    sortedNumbersRow.IsSorted = dataReader.GetBoolean(4);
                 }
             }
 
             return sortedNumbersRow;
         }
 
-        protected Boolean NonQuery(SqlCommand sqlCommand)
+        protected long NonQuery(SqlCommand sqlCommand)
         {
-
             using (var _connection = new SqlConnection(_connectionString))
             {
                 _connection.Open();
 
                 sqlCommand.Connection = _connection;
-                var rowsAffected = sqlCommand.ExecuteNonQuery();
+                long id = (long)sqlCommand.ExecuteScalar();
 
-                if(rowsAffected > 0)
-                {
-                    return false;
-                }
+                return id;
             }
-
-            return true;
         }
     }
 }
