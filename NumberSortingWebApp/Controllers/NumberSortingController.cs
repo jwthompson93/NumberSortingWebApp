@@ -3,6 +3,7 @@ using NumberSortingWebApp.Library.Alert;
 using NumberSortingWebApp.Library.Algorithm.Sorting;
 using NumberSortingWebApp.Library.Database.Object;
 using NumberSortingWebApp.Library.Database.Sql;
+using NumberSortingWebApp.Library.Process;
 using NumberSortingWebApp.Library.TempData;
 using NumberSortingWebApp.Models;
 using System.Diagnostics;
@@ -11,18 +12,9 @@ namespace NumberSortingWebApp.Controllers
 {
     public class NumberSortingController : Controller
     {
-        private SortedNumberConnection connection;
-        private ISort<int> sortingAlgorithmn;
-
-        public NumberSortingController()
-        {
-            connection = new SortedNumberConnection();
-            sortingAlgorithmn = new Quicksort();
-        }
-
         public IActionResult List()
         {
-            var model = new ListViewModel(connection, TempData.Get<Alert>("alert"));
+            var model = new ListViewModel(TempData.Get<Alert>("alert"));
 
             return View(model);
         }
@@ -34,38 +26,33 @@ namespace NumberSortingWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(SortedNumbersRow sortedNumbersRow)
+        public IActionResult Create(string NumbersInput, int SortDirection)
         {
             if(ModelState.IsValid)
             {
-                long id = connection.Insert(sortedNumbersRow);
-
-                // Insert initial value
-                if (id > 0)
+                try
                 {
-                    // Process sort and update
-                    sortedNumbersRow.Id = id;
+                    int[] convertIntArray = NumbersInput.Split(',').Select(int.Parse).ToArray();
 
-                    int[] convertIntArray = sortedNumbersRow.SortedArray.Split(',').Select(int.Parse).ToArray();
+                    var sortedNumbersRow = new SortArrayProcess(new Quicksort(), SortDirection).Process(convertIntArray);
 
-                    Stopwatch sw = Stopwatch.StartNew();
-                    sw.Start();
-                    sortedNumbersRow.SortedArray = String.Join(',', sortingAlgorithmn.Sort(convertIntArray, sortedNumbersRow.SortDirection));
-                    sw.Stop();
+                    if (new InsertProcess().Process(sortedNumbersRow))
+                    {
+                        TempData.Put("alert", new Alert(AlertType.success, "Job has been successfully submitted!"));
 
-                    sortedNumbersRow.TimeTaken = sw.ElapsedMilliseconds;
-                    sortedNumbersRow.IsSorted = true;
-
-                    id = connection.Update(sortedNumbersRow);
+                        // Take user back to List page
+                        return RedirectToAction("List");
+                    }
+                } 
+                catch (FormatException fex)
+                {
+                    TempData.Put("alert", new Alert(AlertType.danger, fex.Message));
                 }
-
-                TempData.Put<Alert>("alert", new Alert(AlertType.success, "Job has been successfully submitted!"));
-
-                // Take user back to List page
-                return RedirectToAction("List");
             }
-
-            TempData.Put<Alert>("alert", new Alert(AlertType.danger, "ModelState not valid"));
+            else
+            {
+                TempData.Put("alert", new Alert(AlertType.danger, "Model State not valid"));
+            }
 
             return RedirectToAction("New");
         }

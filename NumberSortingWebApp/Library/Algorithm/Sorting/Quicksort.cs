@@ -4,12 +4,12 @@ namespace NumberSortingWebApp.Library.Algorithm.Sorting
 {
     public class Quicksort : ISort<int>
     {
-        public int[] Sort(int[] array, SortDirection sortDirection)
+        public int[] Sort(int[] array, int sortDirection)
         {
             return QuickSort(ref array, 0, array.Length - 1, sortDirection);
         }
 
-        private int[] QuickSort(ref int[] array, int low, int high, SortDirection sortDirection)
+        private int[] QuickSort(ref int[] array, int low, int high, int sortDirection)
         {
             if(low < high)
             {
@@ -21,7 +21,7 @@ namespace NumberSortingWebApp.Library.Algorithm.Sorting
             return array;
         }
 
-        private int Partition(ref int[] array, int low, int high, SortDirection sortDirection) { 
+        private int Partition(ref int[] array, int low, int high, int sortDirection) { 
             int pivot = array[high];
             int i = low - 1;
 
@@ -44,13 +44,13 @@ namespace NumberSortingWebApp.Library.Algorithm.Sorting
             array[j] = temp;
         }
 
-        private bool IsSwappable(int arrayValue, int pivot, SortDirection sortDirection)
+        private bool IsSwappable(int arrayValue, int pivot, int sortDirection)
         {
-            if(sortDirection == SortDirection.Ascending)
+            if(sortDirection == (int)SortDirection.Ascending)
             {
                 return arrayValue <= pivot;
             }
-            else if(sortDirection == SortDirection.Descending)
+            else if(sortDirection == (int)SortDirection.Descending)
             {
                 return arrayValue >= pivot;
             }

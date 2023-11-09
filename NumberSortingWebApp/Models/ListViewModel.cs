@@ -13,10 +13,10 @@ namespace NumberSortingWebApp.Models
         [TempData]
         public Alert Alert { get; set; }
 
-        public ListViewModel(SortedNumberConnection connection, Alert alert) { 
+        public ListViewModel(Alert alert) { 
             this.Alert = alert;
 
-            _connection = connection;
+            _connection  = new SortedNumberConnection();
             sortedNumberRowList = _connection.GetAll();
         }
 
