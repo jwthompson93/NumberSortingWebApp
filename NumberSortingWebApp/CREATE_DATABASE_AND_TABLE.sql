@@ -1,3 +1,7 @@
+IF DB_ID('database1') IS NULL
+	CREATE DATABASE [database1]
+GO
+
 USE [database1]
 GO
 
@@ -26,5 +30,6 @@ GO
 
 ALTER TABLE [dbo].[SortedNumbers] ADD  CONSTRAINT [DF_SortedNumbers_is_sorted]  DEFAULT ((0)) FOR [is_sorted]
 GO
+
 
 

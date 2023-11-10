@@ -5,11 +5,14 @@
 
 @if (TempData.ContainsKey("alert"))
 {
-    <div class="alert alert-@Model.Alert.Type.ToString()" role="alert">
-        @Model.Alert.Message
+    <div class="alert alert-@Model.alert.Type.ToString()" role="alert">
+        @Model.alert.Message
     </div>
 }
-<div class="text-left">
+
+<div class="container text-left">
+    <h2>Create Sort</h2>
+    <br/>
     <form method="post" asp-action="Create">
         <table class="table">
             <tr>
@@ -18,20 +21,25 @@
                     <input type="text" class="form-control" asp-for="NumbersInput" required/>
                     <div class="valid-feedback"></div>
                 </td>
+                <td>
+                    Please enter a Comma-separated Integer array. Example: '1,6,2,7,14,73,13'
+                </td>
             </tr>
             <tr>
                 <td>Sort Order</td>
                 <td>
-                    <select asp-for="SortDirection">
+                    <select class="form-control" asp-for="SortDirection">
                         <option value="0">Descending</option>
                         <option value="1">Ascending</option>
                     </select>
+                </td>
+                <td>
                 </td>
             </tr>
         </table>
         <div style="text-align:left">
             <!--<a asp-area="" asp-controller="NumberSorting" asp-action="Create" class="btn btn-primary btn-sm">Create</a>-->
-            <input type="submit" />
+            <input class="btn btn-primary btn-sm" type="submit" />
         </div>
     </form>
 </div>

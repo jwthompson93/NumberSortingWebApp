@@ -17,11 +17,11 @@ namespace NumberSortingWebApp.Models
         [Required]
         public int SortDirection { get; set; }
 
-        public Alert Alert { get; set; }
+        public Alert alert { get; set; }
 
         public CreateViewModel(Alert alert)
         {
-            this.Alert = alert;
+            this.alert = alert;
         }
     }
 }

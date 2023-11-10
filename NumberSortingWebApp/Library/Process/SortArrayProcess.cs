@@ -19,7 +19,8 @@ namespace NumberSortingWebApp.Library.Process
         {
             SortedNumbersRow sortedNumbersRow = new SortedNumbersRow();
 
-            Stopwatch sw = Stopwatch.StartNew();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
 
             sortedNumbersRow.SortedArray = String.Join(',', 
                 sortingAlgorithm.Sort(array, sortDirection));
