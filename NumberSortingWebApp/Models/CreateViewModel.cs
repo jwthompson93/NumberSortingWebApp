@@ -1,12 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using NumberSortingWebApp.Library.Database.Object;
+using NumberSortingWebApp.Library.Alert;
+using System.ComponentModel.DataAnnotations;
 
 namespace NumberSortingWebApp.Models
 {
     public class CreateViewModel : PageModel
     {
         [BindProperty]
-        public SortedNumbersRow SortedNumbersRow { get; set; }
+        [Required]
+        [RegularExpression("[^\\d+,\\d+$]", ErrorMessage = "Values must be numeric and comma-separated")]
+        public string NumbersInput { get; set; }
+
+
+        [BindProperty]
+        [Required]
+        public int SortDirection { get; set; }
+
+        public Alert Alert { get; set; }
+
+        public CreateViewModel(Alert alert)
+        {
+            this.Alert = alert;
+        }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface ISort<T>
     {
-        T[] Sort(T[] array, SortDirection sortDirection);
+        T[] Sort(T[] array, int sortDirection);
     }
 }

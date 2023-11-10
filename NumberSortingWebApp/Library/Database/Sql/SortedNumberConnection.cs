@@ -6,7 +6,7 @@ namespace NumberSortingWebApp.Library.Database.Sql
 {
     public class SortedNumberConnection : DatabaseConnection
     {
-        private readonly string tableName = "SortedNumbers";
+        private readonly string tableName = System.Configuration.ConfigurationManager.AppSettings["Table"];
 
         public List<SortedNumbersRow> GetAll()
         {
@@ -38,7 +38,7 @@ namespace NumberSortingWebApp.Library.Database.Sql
 
             sqlCommand.Parameters.AddWithValue("@sorted_array", sortedNumbersRow.SortedArray);
             sqlCommand.Parameters.AddWithValue("@sort_direction", sortedNumbersRow.SortDirection);
-            sqlCommand.Parameters.AddWithValue("@is_sorted", sortedNumbersRow.IsSorted);
+            sqlCommand.Parameters.AddWithValue("@time_taken", sortedNumbersRow.TimeTaken);
 
             var id = NonQuery(sqlCommand);
 
@@ -52,7 +52,6 @@ namespace NumberSortingWebApp.Library.Database.Sql
             sqlCommand.Parameters.AddWithValue("@sorted_array", sortedNumbersRow.SortedArray);
             sqlCommand.Parameters.AddWithValue("@sort_direction", sortedNumbersRow.SortDirection);
             sqlCommand.Parameters.AddWithValue("@time_taken", sortedNumbersRow.TimeTaken);
-            sqlCommand.Parameters.AddWithValue("@is_sorted", sortedNumbersRow.IsSorted);
             sqlCommand.Parameters.AddWithValue("@id", sortedNumbersRow.Id);
 
             var id = NonQuery(sqlCommand);

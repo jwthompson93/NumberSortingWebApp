@@ -1,57 +1,60 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NumberSortingWebApp.Library.Alert;
 using NumberSortingWebApp.Library.Algorithm.Sorting;
 using NumberSortingWebApp.Library.Database.Object;
 using NumberSortingWebApp.Library.Database.Sql;
+using NumberSortingWebApp.Library.Process;
+using NumberSortingWebApp.Library.TempData;
 using NumberSortingWebApp.Models;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace NumberSortingWebApp.Controllers
 {
     public class NumberSortingController : Controller
     {
-        private SortedNumberConnection connection = new SortedNumberConnection();
-        private ISort<int> sortingAlgorithmn = new Quicksort();
-
         public IActionResult List()
         {
-            var model = new ListViewModel(connection);
+            var model = new ListViewModel(TempData.Get<Alert>("alert"));
+
             return View(model);
         }
 
         public IActionResult New()
         {
-            return View("New");
+            var model = new CreateViewModel(TempData.Get<Alert>("alert"));
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Create(SortedNumbersRow sortedNumbersRow)
+        public IActionResult Create(string NumbersInput, int SortDirection)
         {
-
-            Console.WriteLine("Sorted Array: {0}", sortedNumbersRow.SortedArray.ToString());
-            Console.WriteLine("Sorted Direction: {0}", sortedNumbersRow.SortDirection);
-
-            long id = connection.Insert(sortedNumbersRow);
-
-            // Insert initial value
-            if (id > 0)
+            if(ModelState.IsValid)
             {
-                // Process sort and update
-                sortedNumbersRow.Id = id;
+                try
+                {
+                    int[] convertIntArray = NumbersInput.Split(',').Select(int.Parse).ToArray();
 
-                int[] convertIntArray = sortedNumbersRow.SortedArray.Split(',').Select(int.Parse).ToArray();
+                    var sortedNumbersRow = new SortArrayProcess(new Quicksort(), SortDirection).Process(convertIntArray);
 
-                Stopwatch sw = Stopwatch.StartNew();
-                sw.Start();
-                sortedNumbersRow.SortedArray = String.Join(',', sortingAlgorithmn.Sort(convertIntArray, sortedNumbersRow.SortDirection));
-                sw.Stop();
+                    if (new InsertProcess().Process(sortedNumbersRow))
+                    {
+                        TempData.Put("alert", new Alert(AlertType.success, "Job has been successfully submitted!"));
 
-                sortedNumbersRow.TimeTaken = sw.ElapsedMilliseconds;
-                id = connection.Update(sortedNumbersRow);
+                        // Take user back to List page
+                        return RedirectToAction("List");
+                    }
+                } 
+                catch (FormatException fex)
+                {
+                    TempData.Put("alert", new Alert(AlertType.danger, fex.Message));
+                }
+            }
+            else
+            {
+                TempData.Put("alert", new Alert(AlertType.danger, "Model State not valid"));
             }
 
-            // Take user back to List page
-            return RedirectToAction("List");
+            return RedirectToAction("New");
         }
     }
 }

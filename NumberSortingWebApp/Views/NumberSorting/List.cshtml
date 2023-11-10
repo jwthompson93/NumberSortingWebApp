@@ -1,9 +1,16 @@
-﻿@using NumberSortingWebApp.Library.Algorithm.Sorting;
+﻿@using NumberSortingWebApp.Library.Alert;
+@using NumberSortingWebApp.Library.Algorithm.Sorting;
 @model ListViewModel
 @{
     ViewData["Title"] = "Number Sorting Job List";
 }
 
+@if (TempData.ContainsKey("alert"))
+{
+    <div class="alert alert-@Model.Alert.Type.ToString()" role="alert">
+        @Model.Alert.Message
+    </div>
+}
 <div class="text-center">
     <table class="table">
         <thead>
@@ -11,7 +18,6 @@
                 <th scope="col">Numbers</th>
                 <th scope="col">Sort Direction</th>
                 <th scope="col">Time Taken (ms)</th>
-                <th scope="col">Progress</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
@@ -20,9 +26,8 @@
             {
                 <tr>
                     <td>@sortedNumberRow.SortedArray</td>
-                    <td>@(sortedNumberRow.SortDirection.ToString())</td>
+                    <td>@(sortedNumberRow.SortDirection == 0 ? "Descending" : "Ascending")</td>
                     <td>@sortedNumberRow.TimeTaken</td>
-                    <td>@(sortedNumberRow.IsSorted == true ? "Completed" : "In Progress")</td>
                     <td><button value="Export">Export</button></td>
                 </tr>
             }
