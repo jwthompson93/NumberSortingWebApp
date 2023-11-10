@@ -7,11 +7,12 @@
 
 @if (TempData.ContainsKey("alert"))
 {
-    <div class="alert alert-@Model.Alert.Type.ToString()" role="alert">
-        @Model.Alert.Message
+    <div class="alert alert-@Model.alert.Type.ToString()" role="alert">
+        @Model.alert.Message
     </div>
 }
 <div class="text-center">
+    <h2>Sort List</h2>
     <table class="table">
         <thead>
             <tr>
@@ -35,5 +36,5 @@
     </table>
 </div>
 <div class="text-left">
-    <a asp-area="" asp-controller="NumberSorting" asp-action="New" class="btn btn-primary btn-sm">New Sort</a>
+    <a asp-area="" asp-controller="NumberSorting" asp-action="New" class="btn btn-primary btn-sm">Create New Sort Job</a>
 </div>
