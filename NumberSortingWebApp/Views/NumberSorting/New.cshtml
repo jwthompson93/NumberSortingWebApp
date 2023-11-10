@@ -13,10 +13,20 @@
     <form method="post" asp-action="Create">
         <table class="table">
             <tr>
-                <td>Numbers</td>
+                <td>Current Array</td>
                 <td>
-                    <input type="text" class="form-control" asp-for="NumbersInput" required/>
+                    <label asp-for="NumbersInputArray" />
+                </td>
+                <td> </td>
+            </tr>
+            <tr>
+                <td>Input Number to be added</td>
+                <td>
+                    <input type="number" class="form-control" asp-for="NumberInput" required/>
                     <div class="valid-feedback"></div>
+                </td>
+                <td>
+                    <button onclick="@(() => Model.NumberInput_onClick)" >Add</button>
                 </td>
             </tr>
             <tr>
@@ -27,6 +37,7 @@
                         <option value="1">Ascending</option>
                     </select>
                 </td>
+                <td> </td>
             </tr>
         </table>
         <div style="text-align:left">

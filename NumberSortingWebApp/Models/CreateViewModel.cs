@@ -9,12 +9,13 @@ namespace NumberSortingWebApp.Models
     {
         [BindProperty]
         [Required]
-        [RegularExpression("[^\\d+,\\d+$]", ErrorMessage = "Values must be numeric and comma-separated")]
-        public string NumbersInput { get; set; }
+        public List<int> NumbersInputArray { get; set; }
+
+        [BindProperty]
+        public int NumberInput {  get; set; }
 
 
         [BindProperty]
-        [Required]
         public int SortDirection { get; set; }
 
         public Alert Alert { get; set; }
@@ -22,6 +23,12 @@ namespace NumberSortingWebApp.Models
         public CreateViewModel(Alert alert)
         {
             this.Alert = alert;
+            this.NumbersInputArray = new List<int>();
+        }
+
+        public void NumberInput_onClick()
+        {
+            NumbersInputArray.Add(NumberInput);
         }
     }
 }
